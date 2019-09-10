@@ -1,0 +1,94 @@
+.scrollable{
+    overflow: hidden; 
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+
+.scroll-parent{
+    width: 100%;
+    overflow: hidden;
+}
+
+.scroll-child{
+    overflow-y: scroll; 
+    height: 100%;
+    width: 100%;
+    box-sizing: content-box;
+    overflow-x: hidden;
+}
+
+.scroll-bar{
+    position: absolute;
+    display: block;
+    height: 100%;
+    right: 0;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+}
+
+.main-content{
+    margin-bottom: 0px;
+    display: flex;
+}
+
+.smooth-fade{
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+}
+
+.smooth-fade{
+    opacity: 0;
+    background-color: #222;
+    width: 10px;
+    transition: all 0.3s ease;
+}
+
+.smooth-fade:hover{
+    background-color: #ffffff22;
+    width: 15px;
+    border-radius: 5px;
+}
+
+.smooth-fade:active{
+    background-color: #ffffff22;
+    width: 15px;
+    border-radius: 5px;
+}
+
+.scrollable:hover > .scroll-bar > .scroll-head > .smooth-fade, .smooth-fade.selected, .dragging > .smooth-fade{
+    opacity: 1;
+}
+
+.smooth-fade.selected > .scroll-highlight{
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+}
+
+.hidden{
+    opacity: 0;
+}
+
+.floater-bottom, .floater-top{
+    width:100%;
+    height:100%;
+    flex-grow: 1;
+}
+
+.scroll-head{
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    z-index: 6;
+    user-select: none;
+}
+
+.scrollable.dragging iframe{
+    pointer-events: none;
+}
