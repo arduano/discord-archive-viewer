@@ -3,16 +3,16 @@ var zlib = require("zlib");
 var express = require("express");
 var compression = require("compression");
 
+var config = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
+
 // Set up GET API
 var app = express();
-var port = "3030";
+var port = config["port"];
 
-var directory = __dirname + "/saves/";
-
-app.get("/api", function (req, res) {
+app.get(config["message-header"], function (req, res) {
 
   var save_name = req.query.save_name + ".dsave";
-  var saves = fs.readdirSync(directory);
+  var saves = fs.readdirSync(config["saves-directory"]);
 
   if (!saves.includes(save_name)) {
     res.status(400);
@@ -21,7 +21,7 @@ app.get("/api", function (req, res) {
   };
 
   // Perform in memory
-  var data = Buffer.from(fs.readFileSync(directory + save_name, "utf8"), "base64");
+  var data = Buffer.from(fs.readFileSync(config["saves-directory"] + save_name, "utf8"), "base64");
 
   var out = JSON.parse(zlib.inflateSync(data));
 
@@ -49,7 +49,9 @@ app.get("/api", function (req, res) {
 
 });
 
-app.use(compression());
+if (config["use-compression"]) {
+  app.use(compression());
+};
 
 app.listen(port, function () {
   console.log("Server ready at port %s", port)
