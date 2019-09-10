@@ -13,12 +13,13 @@ var app = express();
 var port = config["port"];
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, UPDATE');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
     next();
 });
-app.use(express.json())
+
+app.use(express.json());
 
 // Store files in memory
 var memory_cache = new Object();
@@ -30,7 +31,7 @@ app.get(config["message-header"], function (req, res) {
 
   if (!req.query.save_name) {
 
-    res.send(saves.filter(x => x.endsWith(".dsave")).map(x => x.substring(0, x.length -6)));
+    res.send(saves.filter(x => x.endsWith(".dsave")).map(x => x.substring(0, x.length - 6)));
     return null;
 
   };
