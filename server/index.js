@@ -18,8 +18,16 @@ var saves_directory = __dirname + config["saves-directory"];
 
 app.get(config["message-header"], function (req, res) {
 
-  var save_name = req.query.save_name + ".dsave";
   var saves = fs.readdirSync(saves_directory);
+
+  if (!req.query.save_name) {
+
+    res.send(saves.filter(x => x.endsWith(".dsave")).map(x => x.substring(0, x.length -6)));
+    return null;
+
+  };
+
+  var save_name = req.query.save_name + ".dsave";
 
   if (!saves.includes(save_name)) {
     res.status(400);
