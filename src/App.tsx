@@ -21,19 +21,20 @@ function GameLoader(location: RouteComponentProps<any, StaticContext, any>) {
 	const [game, setGame]: [Archive | null, any] = useState<Archive | null>(null);
 
 	if (game == null) {
-		WebApi.getGame().then(g => setGame(g));
+		WebApi.getGame(location.match.params.gid).then(g => setGame(g));
 	}
 
 	if (game == null) {
 		return <div className="downloading"><Loader text="Downloading..."></Loader></div>
 	}
 	else {
+		console.log(game);
 		return <Viewer location={location} game={game} />;
 	}
 }
 
 function GameList(location: RouteComponentProps<any, StaticContext, any>) {
-	const [categories, setCategories]: [Category[] | null, any] = useState<Category[] | null>(null);
+	const [categories, setCategories]: [string[] | null, any] = useState<string[] | null>(null);
 
 	if (categories == null) {
 		WebApi.getCategories().then(c => setCategories(c));
@@ -47,7 +48,7 @@ function GameList(location: RouteComponentProps<any, StaticContext, any>) {
 						<div>Loading...</div>
 					) : (
 							categories.map((c, i) => (
-								<Link key={i} to={"game/" + c.id}><div className="game">{c.name}</div></Link>
+								<Link key={i} to={"game/" + c}><div className="game">{c}</div></Link>
 							))
 						)}
 				</div>
@@ -114,7 +115,7 @@ function MessageGroup(props: { messages: Message[], users: any }) {
 						<div className="first-message" key={i}>
 							<div className="pfp-and-name">
 								<div className="pfp">
-									<img src={u.avatar} />
+									<img src={WebApi.tidUrl(u._tid!)} />
 								</div>
 								<div className="username">
 									<span className="name" style={{ color: u.display_hex_colour }}>{u.display_name}</span>

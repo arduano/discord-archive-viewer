@@ -7,7 +7,8 @@ export interface Attachment {
     data: string,
     filename: string,
     filesize: string,
-    id: string
+    id: string,
+    _tid?: string
 }
 
 export interface Message {
@@ -39,7 +40,8 @@ export interface User {
     display_hex_colour: string,
     display_name: string,
     id: string,
-    username: string
+    username: string,
+    _tid?: string
 }
 
 export interface Archive {

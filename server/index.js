@@ -12,6 +12,14 @@ var config = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
 var app = express();
 var port = config["port"];
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, UPDATE');
+    next();
+});
+app.use(express.json())
+
 // Store files in memory
 var memory_cache = new Object();
 var saves_directory = __dirname + config["saves-directory"];
@@ -84,7 +92,8 @@ app.get(config["file-header"], function (req, res) {
   };
 
   // Return data
-  memory_cache[id].data.pipe(res);
+  res.status(200).end(memory_cache[id].data);
+  //memory_cache[id].data.pipe(res);
   return null;
 
 });
@@ -138,7 +147,7 @@ function generateCache (data, identiphrase=null) {
   // Add new entry
   var identifier = crypto.randomBytes(16).toString("hex");
 
-  var data = bufferToStream(data);
+  //var data = bufferToStream(data);
 
   memory_cache[identifier] = {
     data: data,
