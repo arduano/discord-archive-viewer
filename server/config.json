@@ -1,13 +1,14 @@
 {
 
-  "saves-directory": "/saves",
+  "saves-directory": "/saves/",
 
   "message-header": "/api",
+  "file-header": "/file",
   "port": 3030,
 
   "use-gzip-compression": true,
 
   "save-attachments": false,
-  "cache-duration": 50000
+  "cache-duration": 500
 
 }
