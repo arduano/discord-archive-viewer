@@ -45,8 +45,7 @@ app.get(config["message-header"], function (req, res) {
   };
 
   // Perform in memory
-  var data = Buffer.from(fs.readFileSync(saves_directory + save_name, "utf8"), "base64");
-
+  var data = Buffer.from(fs.readFileSync(saves_directory + save_name), "binary");
   var out = JSON.parse(zlib.inflateSync(data));
 
   for (var i = 0; i < out.users.length; i++) {
@@ -92,9 +91,8 @@ app.get(config["file-header"], function (req, res) {
     return null;
   };
 
-  // Return data
-  res.status(200).end(memory_cache[id].data);
-  //memory_cache[id].data.pipe(res);
+  res.end(memory_cache[id].data);
+
   return null;
 
 });
@@ -145,10 +143,16 @@ function generateCache (data, identiphrase=null) {
 
   };
 
+  if (!data) {
+    return null;
+  };
+
   // Add new entry
   var identifier = crypto.randomBytes(16).toString("hex");
 
-  //var data = bufferToStream(data);
+  data = Buffer.from(data);
+
+  console.log(identifier);
 
   memory_cache[identifier] = {
     data: data,

@@ -95,7 +95,7 @@ async function serialise (channel_ids=new Array()) {
 
       if (addable.icon_url) {
         console.log("Downloading profile picture of guild icon %s", channel.guild.id);
-        addable.icon = await request(addable.icon_url);
+        addable.icon = await download(addable.icon_url);
       };
 
       returnable.guilds.push(addable);
@@ -113,7 +113,7 @@ async function serialise (channel_ids=new Array()) {
 
       if (addable.avatar) {
         console.log("Downloading profile picture of user %s", addable.id);
-        addable.avatar_displayable = await request(addable.avatar);
+        addable.avatar_displayable = await download(addable.avatar);
       };
 
       returnable.users.push(addable);
@@ -178,7 +178,7 @@ async function serialiseChannel (channel) {
 
         console.log("Downloading attachment %s, %s [%s bytes]", attachment.filename, attachment.id, attachment.filesize);
 
-        var data = await request(attachment.url);
+        var data = await download(attachment.url);
         pushable.attachments.push({id: attachment.url, data: data, filename: attachment.filename, filesize: attachment.filesize});
       };
 
@@ -227,5 +227,11 @@ async function getMessage (channel, from) {
   var messages = (await channel.fetchMessages({limit: 100, before: from})).array();
 
   return messages;
+
+};
+
+async function download (uri) {
+
+  return await request({uri: uri, encoding: null}).toString("binary");
 
 };
