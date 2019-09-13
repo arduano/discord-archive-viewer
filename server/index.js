@@ -91,7 +91,7 @@ app.get(config["file-header"], function (req, res) {
     return null;
   };
 
-  res.end(memory_cache[id].data);
+  memory_cache[id].data.pipe(res);
 
   return null;
 
@@ -151,6 +151,7 @@ function generateCache (data, identiphrase=null) {
   var identifier = crypto.randomBytes(16).toString("hex");
 
   data = Buffer.from(data);
+  data = bufferToStream(data);
 
   console.log(identifier);
 
