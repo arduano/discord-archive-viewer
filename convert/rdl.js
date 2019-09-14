@@ -5,7 +5,19 @@ var request = require("request-promise");
 // Save in binary
 var directory = __dirname + "/files/";
 
+var Discord = require("discord.js");
+var client = new Discord.Client();
+
+client.on("ready", async function () {
+
+  await run();
+  process.exit();
+
+});
+
 async function run () {
+
+  var cache = new Array();
 
   var saves = fs.readdirSync(directory);
   for (var i = 0; i < saves.length; i++) {
@@ -22,20 +34,44 @@ async function run () {
 
     console.log("Parsing %s", saves[i]);
 
-    json = await parse(json);
-
-    var out = zlib.deflateSync(JSON.stringify(json));
-    fs.writeFileSync(file, out);
+    cache.push(saveParse(file, json));
 
   };
+
+  return Promise.all(cache);
+
+};
+
+async function saveParse (file, json) {
+
+  json = await parse(json);
+
+  var out = zlib.deflateSync(JSON.stringify(json));
+  fs.writeFileSync(file, out);
+
+  return null;
 
 };
 
 async function parse (out) {
 
   for (var i = 0; i < out.users.length; i++) {
+
+    try {
+      var user = await client.fetchUser(out.users[i].id);
+    } catch (err) {
+      var user = null;
+    };
+
+    if (!user) {
+      out.users[i].avatar = null;
+      continue;
+    };
+
+    out.users[i].avatar = user.displayAvatarURL.replace(/\?size=[0-9]{1,}/g, "?size=128");
     out.users[i].avatar_displayable = await attemptDownload(out.users[i].avatar);
     console.log("Downloaded avatar from: %s", out.users[i].avatar);
+
   };
 
   for (var i = 0; i < out.guilds.length; i++) {
@@ -71,4 +107,4 @@ async function parse (out) {
 
 };
 
-run();
+client.login();
