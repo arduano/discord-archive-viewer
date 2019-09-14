@@ -1,6 +1,5 @@
 import { Archive, Category } from './types';
 import axios from 'axios';
-//const archive = require('../hexacross.json') as Archive;
 
 export default class WebApi {
     static url = 'http://localhost:3030/';

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-console.log(require('./hexacross.json'));
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

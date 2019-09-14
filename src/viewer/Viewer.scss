@@ -1,0 +1,38 @@
+
+
+.user-container {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    height: 42px;
+    img, .missing-pfp {
+        width: 32px;
+        height: 32px;
+        border-radius: 100%;
+    }
+    .username {
+        font-size: 16px;
+        font-weight: 400;
+        font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+        margin-left: 10px;
+    }
+}
+
+.message-line {
+    margin-left: 80px;
+    margin-right: 10px;
+    color: #dcddde;
+    font-size: 15px;
+    font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+.attachment{
+    margin-top: 10px;
+    img{
+        max-width: 500px;
+        max-height: 300px;
+    }
+}
