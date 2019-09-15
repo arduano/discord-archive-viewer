@@ -27,7 +27,7 @@ function MessageGroup(props: { messages: Message[], users: any }) {
 		return (
 			<div className="message-line">
 				<div>
-					{props.text}
+					<FormattedText text={props.text} />
 				</div>
 				{props.attachments != null && props.attachments.length != 0 && (props.attachments.map((a, i) => (
 					<div key={i} className="attachment">
@@ -175,17 +175,65 @@ interface TextStyles {
 }
 
 function FormattedText(props: { text: string, styles?: TextStyles }) {
-	if (props.styles == null) props.styles = {
+	let text = props.text;
+	let styles: TextStyles;
+	if (props.styles == null) styles = {
 		italic: false,
 		bold: false,
 		underline: false,
 		strikeout: false,
 	}
-	if (!props.text.match(/.*[*~`_].*/)) {
-		return <div>{props.text}</div>
+	else styles = props.styles;
+	if (!text.match(/.*[*~`_].*/)) {
+		return <span>{text}</span>
 	}
 	else {
-		let styles = ['**', '*', '_',]
+		let data: any[] = []
+		while (text.length != 0) {
+			let matches = [
+				{ match: /```(?<content>(.|\n)+?)```/, name: 'big code' },
+				{ match: /`(?<content>.+?)`/, name: 'code' }
+			];
+			if (!styles.bold) matches.push({ match: /\*\*(?<content>.+?)\*\*/, name: 'bold' });
+			if (!styles.italic) matches.push({ match: /\*(?<content>.+?)\*/, name: 'italic' });
+			if (!styles.underline) matches.push({ match: /__(?<content>.+?)__/, name: 'underline' });
+			if (!styles.italic) matches.push({ match: /_(?<content>.+?)_/, name: 'italic' });
+			if (!styles.strikeout) matches.push({ match: /~~(?<content>.+?)~~/, name: 'strikeout' });
+			let first: any = null;
+			let firstMatch: string = '';
+			matches.forEach(s => {
+				let match = text.match(s.match);
+				if(s.name == 'big code' && text.includes('```')) console.log('match', match)
+				if (match == null) return;
+				if (match.index == null) return;
+				if (first == null || match.index < first.index!) {
+					first = match;
+					firstMatch = s.name;
+				}
+			});
+			if (first == null) break;
+			if (first.index != 0) {
+				data.push(text.substr(0, first.index));
+				text = text.substring(first.index);
+			}
+			let _styles = { ...styles };
+			(_styles as any)[firstMatch] = true;
+			if (firstMatch == 'big code')
+				data.push(<code className="big-code"><span>{first[1]}</span></code>)
+			if (firstMatch == 'code')
+				data.push(<code>{first[1]}</code>)
+			if (firstMatch == 'strikeout')
+				data.push(<s><FormattedText text={first[1]} styles={_styles} /></s>)
+			if (firstMatch == 'bold')
+				data.push(<strong><FormattedText text={first[1]} styles={_styles} /></strong>)
+			if (firstMatch == 'italic')
+				data.push(<i><FormattedText text={first[1]} styles={_styles} /></i>)
+			if (firstMatch == 'underline')
+				data.push(<i><FormattedText text={first[1]} styles={_styles} /></i>)
+			text = text.substr(first[0].length);
+		}
+		data.push(text);
+		return <span>{data}</span>
 	}
 }
 
