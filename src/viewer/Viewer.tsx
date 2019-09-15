@@ -108,7 +108,7 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 							if (e != null) {
 								console.log('render-start');
 								setTimeout(async () => {
-									let list = msgs.map((m, i) => <MessageGroup messages={m} users={users} key={i} />);
+									let list = msgs.reverse().map((m, i) => <MessageGroup messages={m} users={users} key={i} />);
 									ReactDOM.render((
 										<Scroller>
 											<div className="messages-list">
