@@ -9,15 +9,31 @@ import { Scroller } from './scroller/Scroller';
 import ReactDOM from 'react-dom';
 import Viewer from './viewer/Viewer';
 import { Loader } from './util/MiscComponents';
+import './armsupdatedvectorised.svg';
 
-const App: React.FC = () => (
-	<BrowserRouter>
-		<Switch>
-			<Route exact path="/" component={GameList} />
-			<Route path="/game/:gid" component={GameLoader} />
-		</Switch>
-	</BrowserRouter>
-)
+const App = () => {
+	const [fadingSplash, setFadingSplash] = useState<boolean>(false);
+	const [hidingSplash, setHidingSplash] = useState<boolean>(false);
+
+	if(!fadingSplash && !hidingSplash) setTimeout(() => setFadingSplash(true), 1000);
+	if(fadingSplash && !hidingSplash) setTimeout(() => setHidingSplash(true), 1000);
+
+	return (
+		<div>
+			<div style={{ display: hidingSplash ? 'none' : undefined }} className={`splash ${fadingSplash ? 'fade' : ''}`}>
+				<img src='/armsupdatedvectorised.svg'/>
+			</div>
+			{!(!fadingSplash && !hidingSplash) && (
+				<BrowserRouter>
+					<Switch>
+						<Route exact path="/" component={GameList} />
+						<Route path="/game/:gid" component={GameLoader} />
+					</Switch>
+				</BrowserRouter>
+			)}
+		</div>
+	)
+}
 
 function GameLoader(location: RouteComponentProps<any, StaticContext, any>) {
 	const [game, setGame]: [Archive | null, any] = useState<Archive | null>(null);

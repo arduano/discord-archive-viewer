@@ -54,28 +54,6 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, {
 	}
 }
 
-// function Category(props: { open: boolean, toggleOpen: () => void, id: string, name: string, channels: Channel[], location: RouteComponentProps<any, StaticContext, any> }) {
-// 	let channel = props.channels.find(c => c.name == props.location.match.params.cid);
-
-// 	return (
-// 		<div className="category-container">
-// 			<div className="category-line" onClick={() => props.toggleOpen()}>
-// 				<div className="material-icons">{props.open ? "keyboard_arrow_down" : "keyboard_arrow_right"}</div>
-// 				<div>{props.name}</div>
-// 			</div>
-// 			<div className={`${props.open ? '' : 'collapsed'}`}>
-// 				{props.channels.sort((a, b) => a.position - b.position).map((c, i) => (
-// 					<Link to={'/game/' + props.location.match.params.gid + '/' + c.name}>
-// 						<div className={`channel-link ${channel != null && c.name == channel.name ? 'selected' : ''}`}>
-// 							<div className="channel-hashtag">{hashtag}</div><div className="channel-name">{c.name}</div>
-// 						</div>
-// 					</Link>
-// 				))}
-// 			</div>
-// 		</div>
-// 	)
-//}
-
 type CategoryProps = { open: boolean, toggleOpen: () => void, id: string, name: string, channels: Channel[], location: RouteComponentProps<any, StaticContext, any> };
 
 class Category extends React.PureComponent<CategoryProps, {}> {
@@ -100,7 +78,7 @@ class Category extends React.PureComponent<CategoryProps, {}> {
 				</div>
 				<div className={`${this.props.open ? '' : 'collapsed'}`}>
 					{this.props.channels.sort((a, b) => a.position - b.position).map((c, i) => (
-						<Link to={'/game/' + this.props.location.match.params.gid + '/' + c.name}>
+						<Link key={i} to={'/game/' + this.props.location.match.params.gid + '/' + c.name}>
 							<div className={`channel-link ${channel != null && c.name == channel.name ? 'selected' : ''}`}>
 								<div className="channel-hashtag">{hashtag}</div><div className="channel-name">{c.name}</div>
 							</div>

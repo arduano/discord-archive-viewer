@@ -189,3 +189,23 @@ a:last-child > .game {
 	height: 100vh;
 	background-color: #36393f;
 }
+
+.splash{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    opacity: 1;
+    transition: all 0.5s ease-out;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+        width: 30%;
+    }
+}
+.splash.fade{
+    pointer-events: none;
+    opacity: 0;
+}
