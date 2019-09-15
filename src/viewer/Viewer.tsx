@@ -55,7 +55,9 @@ function MessageGroup(props: { messages: Message[], users: any }) {
 										)}
 								</div>
 								<div className="username">
-									<span className="name" style={{ color: u.display_hex_colour }}>{u.display_name}</span>
+									<span className="name" style={{ color: u.display_hex_colour }}>
+										{u.display_name != null ? u.display_name : u.username}
+									</span>
 									<span className="message-time">{getDateString(new Date(m.createdTimestamp))}</span>
 								</div>
 							</div>
@@ -79,10 +81,10 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 		let msgs: Message[][] = []
 		let lastmsg: Message | null = null;
 		let msgGroup: Message[] = [];
-		channel.messages.forEach(msg => {
+		channel.messages.reverse().forEach(msg => {
 			if (lastmsg == null) lastmsg = msg;
 			if (lastmsg.user != msg.user ||
-				lastmsg.createdTimestamp + 10 * 60000 < msg.createdTimestamp) {
+				lastmsg.createdTimestamp - 10 * 60000 > msg.createdTimestamp) {
 				msgs.push(msgGroup);
 				msgGroup = [];
 			}
