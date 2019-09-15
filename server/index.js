@@ -153,8 +153,6 @@ function generateCache (data, identiphrase=null) {
   data = Buffer.from(data);
   data = bufferToStream(data);
 
-  console.log(identifier);
-
   memory_cache[identifier] = {
     data: data,
     identiphrase: identiphrase,
