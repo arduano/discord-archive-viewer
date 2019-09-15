@@ -37,7 +37,15 @@
 }
 
 .message-line {
+    font-size: 1rem;
+    line-height: 1.375;
     white-space: pre-wrap;
+    span {
+        font-size: 1rem;
+        line-height: 1.375;
+        width: auto;
+        height: auto;
+    }
     code {
         background-color: #2f3136;
         width: auto;
@@ -64,5 +72,18 @@
         color: #b9bbbe;
         margin: 0;
         border: 1px solid #202225;
+    }
+    .spoiler {
+        opacity: 1;
+        transition: all 0.1s ease;
+        background-color: hsla(0, 0%, 100%, 0.1);
+        padding: 0.15em 0;
+        border-radius: 3px;
+    }
+    .spoiler.hidden {
+        user-select: none;
+        cursor: pointer;
+        color: transparent;
+        background-color: #202225;
     }
 }

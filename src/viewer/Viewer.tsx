@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Redirect, RouteComponentProps, StaticContext, Switch, Route } from "react-router";
 import { Archive, Message, User, Attachment } from "../util/types";
 import WebApi from "../util/webapi";
@@ -84,7 +84,7 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 		channel.messages.reverse().forEach(msg => {
 			if (lastmsg == null) lastmsg = msg;
 			if (lastmsg.user != msg.user ||
-				lastmsg.createdTimestamp - 10 * 60000 > msg.createdTimestamp) {
+				lastmsg.createdTimestamp + 10 * 60000 < msg.createdTimestamp) {
 				msgs.push(msgGroup);
 				msgGroup = [];
 			}
@@ -184,7 +184,7 @@ function FormattedText(props: { text: string, styles?: TextStyles }) {
 		strikeout: false,
 	}
 	else styles = props.styles;
-	if (!text.match(/.*[*~`_].*/)) {
+	if (!text.match(/.*[*~`_\|].*/)) {
 		return <span>{text}</span>
 	}
 	else {
@@ -192,18 +192,19 @@ function FormattedText(props: { text: string, styles?: TextStyles }) {
 		while (text.length != 0) {
 			let matches = [
 				{ match: /```(?<content>(.|\n)+?)```/, name: 'big code' },
-				{ match: /`(?<content>.+?)`/, name: 'code' }
+				{ match: /`(?<content>(.|\n)+?)`/, name: 'code' },
+				{ match: /\|\|(?<content>(.|\n)+?)\|\|/, name: 'spoiler' },
 			];
-			if (!styles.bold) matches.push({ match: /\*\*(?<content>.+?)\*\*/, name: 'bold' });
-			if (!styles.italic) matches.push({ match: /\*(?<content>.+?)\*/, name: 'italic' });
-			if (!styles.underline) matches.push({ match: /__(?<content>.+?)__/, name: 'underline' });
-			if (!styles.italic) matches.push({ match: /_(?<content>.+?)_/, name: 'italic' });
-			if (!styles.strikeout) matches.push({ match: /~~(?<content>.+?)~~/, name: 'strikeout' });
+			if (!styles.bold) matches.push({ match: /\*\*(?<content>(.|\n)+?)\*\*/, name: 'bold' });
+			if (!styles.italic) matches.push({ match: /\*(?<content>(.|\n)+?)\*/, name: 'italic' });
+			if (!styles.underline) matches.push({ match: /__(?<content>(.|\n)+?)__/, name: 'underline' });
+			if (!styles.italic) matches.push({ match: /_(?<content>(.|\n)+?)_/, name: 'italic' });
+			if (!styles.strikeout) matches.push({ match: /~~(?<content>(.|\n)+?)~~/, name: 'strikeout' });
 			let first: any = null;
 			let firstMatch: string = '';
 			matches.forEach(s => {
 				let match = text.match(s.match);
-				if(s.name == 'big code' && text.includes('```')) console.log('match', match)
+				if (text.includes('||')) console.log('spoiler', match);
 				if (match == null) return;
 				if (match.index == null) return;
 				if (first == null || match.index < first.index!) {
@@ -218,23 +219,32 @@ function FormattedText(props: { text: string, styles?: TextStyles }) {
 			}
 			let _styles = { ...styles };
 			(_styles as any)[firstMatch] = true;
+			if (firstMatch == 'spoiler') console.log("Spoiler", first[1])
 			if (firstMatch == 'big code')
 				data.push(<code className="big-code"><span>{first[1]}</span></code>)
-			if (firstMatch == 'code')
+			else if (firstMatch == 'code')
 				data.push(<code>{first[1]}</code>)
-			if (firstMatch == 'strikeout')
+			else if (firstMatch == 'strikeout')
 				data.push(<s><FormattedText text={first[1]} styles={_styles} /></s>)
-			if (firstMatch == 'bold')
+			else if (firstMatch == 'bold')
 				data.push(<strong><FormattedText text={first[1]} styles={_styles} /></strong>)
-			if (firstMatch == 'italic')
+			else if (firstMatch == 'italic')
 				data.push(<i><FormattedText text={first[1]} styles={_styles} /></i>)
-			if (firstMatch == 'underline')
-				data.push(<i><FormattedText text={first[1]} styles={_styles} /></i>)
+			else if (firstMatch == 'underline')
+				data.push(<u><FormattedText text={first[1]} styles={_styles} /></u>)
+			else if (firstMatch == 'spoiler')
+				data.push(<Spoiler><FormattedText text={first[1]} styles={_styles} /></Spoiler>)
+			else data.push(first[1]);
 			text = text.substr(first[0].length);
 		}
 		data.push(text);
-		return <span>{data}</span>
+		return data as any;
 	}
+}
+
+function Spoiler(props: { children: any }) {
+	const [hidden, setHidden] = useState<boolean>(true);
+	return <span onClick={() => setHidden(false)} className={`spoiler ${hidden ? 'hidden' : ``}`}>{props.children}</span>
 }
 
 export default Viewer;
