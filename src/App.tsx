@@ -30,7 +30,6 @@ function GameLoader(location: RouteComponentProps<any, StaticContext, any>) {
 		return <div className="downloading"><Loader text="Downloading..."></Loader></div>
 	}
 	else {
-		console.log(game);
 		return <Viewer location={location} game={game} />;
 	}
 }

@@ -24,7 +24,6 @@ function MessageGroup(props: { messages: Message[], users: any }) {
 	}
 
 	function MessageLine(props: { text: string, attachments?: Attachment[] }) {
-		if (props.attachments != null && props.attachments.length) console.log(props);
 		return (
 			<div className="message-line">
 				<div>
@@ -106,7 +105,6 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 					<div className="messages-container" ref={
 						e => {
 							if (e != null) {
-								console.log('render-start');
 								setTimeout(async () => {
 									let list = msgs.reverse().map((m, i) => <MessageGroup messages={m} users={users} key={i} />);
 									ReactDOM.render((
@@ -163,7 +161,8 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 				<Route exact path={props.location.match.path} component={() => <Redirect to={props.location.match.url + "/" + props.game.channels[0].name} />} />
 				<Route exact path={props.location.match.path + '/:cid'} component={MsgView} />
 			</Switch>
-		</div>)
+		</div>
+	)
 }
 
 interface TextStyles {
