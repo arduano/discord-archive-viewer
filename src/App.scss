@@ -67,32 +67,6 @@ a:last-child > .game {
     background-color: #fff3;
 }
 
-.top-bar {
-    height: 54px;
-    box-shadow: 0 0 2px black;
-    display: flex;
-    align-items: center;
-    padding-left: 8px;
-}
-
-.channel-title {
-    display: flex;
-    .channel-hashtag {
-        margin: 0 8px;
-    }
-    .channel-name {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 6px;
-        margin-left: 7px;
-        color: #fff;
-    }
-}
-
-.hashtag {
-    color: #72767d;
-}
-
 .right-content {
     height: 0px;
     flex: 1 1;
