@@ -50,7 +50,7 @@ function GameList(location: RouteComponentProps<any, StaticContext, any>) {
 						<div>Loading...</div>
 					) : (
 							categories.map((c, i) => (
-								<Link key={i} to={"game/" + c}><div className="game">{c}</div></Link>
+								<Link key={i} to={"game/" + encodeURI(c)}><div className="game">{c}</div></Link>
 							))
 						)}
 				</div>

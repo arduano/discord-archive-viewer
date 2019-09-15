@@ -96,73 +96,96 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 		props.game.users.forEach(u => users[u.id] = u);
 
 		return (
-			<div className="content">
-				<div className="left-side">
-					<div className="top-bar">
-						<Link to="/">
-							<div className="back-link-container">
-								<div className="material-icons">arrow_back</div>
-								<div className="back-text">Back</div>
-							</div>
-						</Link>
+			<div className="right-side">
+				<div className="top-bar">
+					<div className="channel-title">
+						<div className="channel-hashtag">{hashtag}</div><div className="channel-name">{channel.name}</div>
 					</div>
-					<ChannelList location={props.location} game={props.game} />
 				</div>
-				<div className="right-side">
-					<div className="top-bar">
-						<div className="channel-title">
-							<div className="channel-hashtag">{hashtag}</div><div className="channel-name">{channel.name}</div>
-						</div>
-					</div>
-					<div className="right-content">
-						<div className="messages-container" ref={
-							e => {
-								if (e != null) {
-									console.log('render-start');
-									setTimeout(async () => {
-										let list = msgs.map((m, i) => <MessageGroup messages={m} users={users} key={i} />);
-										ReactDOM.render((
-											<Scroller>
-												<div className="messages-list">
-													<div>
-														{list}
-													</div>
+				<div className="right-content">
+					<div className="messages-container" ref={
+						e => {
+							if (e != null) {
+								console.log('render-start');
+								setTimeout(async () => {
+									let list = msgs.map((m, i) => <MessageGroup messages={m} users={users} key={i} />);
+									ReactDOM.render((
+										<Scroller>
+											<div className="messages-list">
+												<div>
+													{list}
 												</div>
-											</Scroller>
-										), e);
-									}, 100);
-								}
+											</div>
+										</Scroller>
+									), e);
+								}, 100);
 							}
-						}>
-							<Loader text="Rendering..." />
-						</div>
-						<div className="users-list">
-							<Scroller>
-								<div className="users-title">{'USERS—' + props.game.users.length}</div>
-								{props.game.users.map((u, i) => {
-									return (
-										<div className="user-container" key={i}>
-											{u._tid != null ? (
-												<img src={WebApi.tidUrl(u._tid!)} />
-											) : (
-													<MissingPFP size={15} />
-												)}
-											<div style={{ color: u.display_hex_colour }} className="username">{u.display_name}</div>
-										</div>
-									)
-								})}
-							</Scroller>
-						</div>
+						}
+					}>
+						<Loader text="Rendering..." />
+					</div>
+					<div className="users-list">
+						<Scroller>
+							<div className="users-title">{'USERS—' + props.game.users.length}</div>
+							{props.game.users.map((u, i) => {
+								return (
+									<div className="user-container" key={i}>
+										{u._tid != null ? (
+											<img src={WebApi.tidUrl(u._tid!)} />
+										) : (
+												<MissingPFP size={15} />
+											)}
+										<div style={{ color: u.display_hex_colour }} className="username">{u.display_name}</div>
+									</div>
+								)
+							})}
+						</Scroller>
 					</div>
 				</div>
 			</div>
 		)
 	}
 
-	return <Switch>
-		<Route exact path={props.location.match.path} component={() => <Redirect to={props.location.match.url + "/" + props.game.channels[0].name} />} />
-		<Route exact path={props.location.match.path + '/:cid'} component={MsgView} />
-	</Switch>
+	return (
+		<div className="content">
+			<div className="left-side">
+				<div className="top-bar">
+					<Link to="/">
+						<div className="back-link-container">
+							<div className="material-icons">arrow_back</div>
+							<div className="back-text">Back</div>
+						</div>
+					</Link>
+				</div>
+				<ChannelList location={props.location} game={props.game} />
+			</div>
+			<Switch>
+				<Route exact path={props.location.match.path} component={() => <Redirect to={props.location.match.url + "/" + props.game.channels[0].name} />} />
+				<Route exact path={props.location.match.path + '/:cid'} component={MsgView} />
+			</Switch>
+		</div>)
+}
+
+interface TextStyles {
+	italic: boolean,
+	bold: boolean,
+	underline: boolean,
+	strikeout: boolean
+}
+
+function FormattedText(props: { text: string, styles?: TextStyles }) {
+	if (props.styles == null) props.styles = {
+		italic: false,
+		bold: false,
+		underline: false,
+		strikeout: false,
+	}
+	if (!props.text.match(/.*[*~`_].*/)) {
+		return <div>{props.text}</div>
+	}
+	else {
+		let styles = ['**', '*', '_',]
+	}
 }
 
 export default Viewer;
