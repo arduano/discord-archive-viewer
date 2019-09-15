@@ -91,7 +91,7 @@ app.get(config["file-header"], function (req, res) {
     return null;
   };
 
-  res.status(200).send(memory_cache[id]);
+  res.status(200).end(memory_cache[id].data);
 
   return null;
 
