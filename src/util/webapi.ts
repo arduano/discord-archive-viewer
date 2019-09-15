@@ -1,8 +1,9 @@
 import { Archive, Category } from './types';
 import axios from 'axios';
+import config from '../config';
 
 export default class WebApi {
-    static url = 'http://localhost:3030/';
+    static url = config.url;
     static async getCategories() {
         let cat = await axios.get(WebApi.url + 'api')
         return cat.data;
