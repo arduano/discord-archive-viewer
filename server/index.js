@@ -6,6 +6,8 @@ var crypto = require("crypto");
 var express = require("express");
 var compression = require("compression");
 
+var path = require("path");
+
 var config = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
 
 // Set up GET API
@@ -95,6 +97,14 @@ app.get(config["file-header"], function (req, res) {
 
   return null;
 
+});
+
+app.get("**", (req, res) => {
+  if (fs.existsSync(path.join(__dirname, "build", req.url)) && req.url != "/") {
+    res.sendFile(path.join(__dirname, "build", req.url));
+  } else {
+    res.sendFile("build/index.html", { root: __dirname });
+  };
 });
 
 // Cache handler
