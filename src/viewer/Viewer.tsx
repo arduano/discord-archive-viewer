@@ -94,7 +94,7 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 				msgGroup = [];
 			}
 			lastmsg = msg;
-			msgGroup.unshift(msg);
+			msgGroup.push(msg);
 		});
 		msgs.push(msgGroup);
 
