@@ -138,6 +138,11 @@ async function serialiseChannel (channel) {
 
   var messages = await indexChannel(channel);
 
+  // Sort messages
+  messages.sort(function (a, b) {
+    return a.createdTimestamp - b.createdTimestamp;
+  });
+
   var storage = {
     users: new Object(),
     messages: new Array()

@@ -39,7 +39,7 @@ async function saveParse (file, json) {
   json = await parse(json);
 
   var out = zlib.deflateSync(JSON.stringify(json));
-  //fs.writeFileSync(file, out);
+  fs.writeFileSync(file, out);
 
   return null;
 
@@ -49,9 +49,10 @@ async function parse (out) {
 
   for (var i = 0; i < out.channels.length; i++) {
 
-    for (var j = 0; j < out.channels[i].messages.length; j++) {
-      console.log(out.channels[i].messages[j].createdTimestamp);
-    };
+    // Sort messages
+    out.channels[i].messages.sort(function (a, b) {
+      return a.createdTimestamp - b.createdTimestamp;
+    });
 
   };
 
