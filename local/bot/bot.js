@@ -19,7 +19,7 @@ client.on("ready", async function () {
 
   savable = zlib.deflateSync(savable);
 
-  fs.writeFileSync(save_directory, savable.toString("base64"));
+  fs.writeFileSync(save_directory, savable);
   var file_size = fs.statSync(save_directory).size / 1000000;
 
   console.log("Saved file to %s [%s MB]", save_directory, file_size);
