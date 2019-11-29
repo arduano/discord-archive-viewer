@@ -13,7 +13,7 @@ type ChannelListProps = { location: RouteComponentProps<any, StaticContext, any>
 export default class ChannelList extends React.PureComponent<ChannelListProps, { open: boolean[] }> {
 	constructor(props: ChannelListProps) {
 		super(props);
-		this.state = { open: this.props.game.categories.map(c => false) };
+		this.state = { open: this.props.game.categories.map(c => true) };
 		this.ChannelListSelection = this.ChannelListSelection.bind(this);
 	}
 

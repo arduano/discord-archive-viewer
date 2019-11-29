@@ -11,17 +11,23 @@ import Viewer from './viewer/Viewer';
 import { Loader } from './util/MiscComponents';
 import './armsupdatedvectorised.svg';
 
+interface GameCardProps {
+	name: string;
+	thumbnail: string;
+	link: string;
+}
+
 const App = () => {
 	const [fadingSplash, setFadingSplash] = useState<boolean>(false);
 	const [hidingSplash, setHidingSplash] = useState<boolean>(false);
 
-	if(!fadingSplash && !hidingSplash) setTimeout(() => setFadingSplash(true), 1000);
-	if(fadingSplash && !hidingSplash) setTimeout(() => setHidingSplash(true), 1000);
+	if (!fadingSplash && !hidingSplash) setTimeout(() => setFadingSplash(true), 1000);
+	if (fadingSplash && !hidingSplash) setTimeout(() => setHidingSplash(true), 1000);
 
 	return (
 		<div>
 			<div style={{ display: hidingSplash ? 'none' : undefined }} className={`splash ${fadingSplash ? 'fade' : ''}`}>
-				<img src='/armsupdatedvectorised.svg'/>
+				<img src='/armsupdatedvectorised.svg' />
 			</div>
 			{!(!fadingSplash && !hidingSplash) && (
 				<BrowserRouter>
@@ -60,16 +66,33 @@ function GameList(location: RouteComponentProps<any, StaticContext, any>) {
 	return (
 		<div className="categories-content">
 			<Scroller>
-				<div className="categories-list">
-					{categories == null ? (
-						<div>Loading...</div>
-					) : (
-							categories.map((c, i) => (
-								<Link key={i} to={"game/" + encodeURI(c)}><div className="game">{c}</div></Link>
-							))
-						)}
+				<div className="list-container">
+					<div className="categories-list">
+						{categories == null ? (
+							<div>Loading...</div>
+						) : (
+								categories.map((c, i) => (
+									<GameCard key={i} link={"game/" + encodeURI(c)} name={c} thumbnail={'url(https://i.imgur.com/T1ZPIDY.png)'} />
+								))
+							)}
+
+					</div>
 				</div>
 			</Scroller>
+		</div>
+	)
+}
+
+function GameCard(props: GameCardProps) {
+	return (
+		<div className="game">
+			<Link to={props.link}>
+				<div className="game-card" style={{ backgroundImage: props.thumbnail }}>
+					<div className="game-card-data">
+						<div className="game-name">{props.name}</div>
+					</div>
+				</div>
+			</Link>
 		</div>
 	)
 }

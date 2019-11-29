@@ -76,9 +76,10 @@ function MessageGroup(props: { messages: Message[], users: any }) {
 
 function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>, game: Archive }) {
 	function MsgView(prps: RouteComponentProps<any, StaticContext, any>) {
+		if (localStorage.getItem('show-users') == null) localStorage.setItem('show-users', 'false');
 		const [showingUsers, setShowingUsers] = useState<boolean>(localStorage.getItem('show-users') == 'true');
-		if(showingUsers && localStorage.getItem('show-users') != 'true') localStorage.setItem('show-users', 'true');
-		if(!showingUsers && localStorage.getItem('show-users') == 'true') localStorage.setItem('show-users', 'false');
+		if (showingUsers && localStorage.getItem('show-users') != 'true') localStorage.setItem('show-users', 'true');
+		if (!showingUsers && localStorage.getItem('show-users') == 'true') localStorage.setItem('show-users', 'false');
 
 		let channel = props.game.channels.find(c => c.name == prps.match.params.cid);
 		if (channel == null) return <Redirect to={props.location.match.url} />
@@ -96,6 +97,7 @@ function Viewer(props: { location: RouteComponentProps<any, StaticContext, any>,
 			lastmsg = msg;
 			msgGroup.push(msg);
 		});
+		msgGroup.reverse();
 		msgs.push(msgGroup);
 
 		let users: any = {}
